@@ -7,11 +7,15 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.lab_week_05.api.CatApiService
 import com.example.lab_week_05.model.ImageData
-import retrofit2.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 
 class MainActivity : AppCompatActivity() {
 
+    // Retrofit instance
     private val retrofit by lazy {
         Retrofit.Builder()
             .baseUrl("https://api.thecatapi.com/v1/")
@@ -19,18 +23,22 @@ class MainActivity : AppCompatActivity() {
             .build()
     }
 
+    // Service instance
     private val catApiService by lazy {
         retrofit.create(CatApiService::class.java)
     }
 
+    // TextView untuk nampilin breed
     private val apiResponseView: TextView by lazy {
         findViewById(R.id.api_response)
     }
 
+    // ImageView untuk nampilin gambar kucing
     private val imageResultView: ImageView by lazy {
         findViewById(R.id.image_result)
     }
 
+    // Glide loader
     private val imageLoader: ImageLoader by lazy {
         GlideLoader(this)
     }
@@ -55,12 +63,17 @@ class MainActivity : AppCompatActivity() {
             ) {
                 if (response.isSuccessful) {
                     val imageList = response.body()
-                    val firstImage = imageList?.firstOrNull()?.imageUrl.orEmpty()
+                    val firstImage = imageList?.firstOrNull()
 
-                    apiResponseView.text = "Image URL: $firstImage"
+                    // ✅ ambil breed kalau ada, kalau kosong → "Unknown"
+                    val breedName = firstImage?.breeds?.firstOrNull()?.name ?: "Unknown"
+                    apiResponseView.text = "Breed: $breedName"
 
-                    if (firstImage.isNotBlank()) {
-                        imageLoader.loadImage(firstImage, imageResultView)
+                    // ✅ load image ke ImageView
+                    firstImage?.imageUrl?.let { url ->
+                        if (url.isNotBlank()) {
+                            imageLoader.loadImage(url, imageResultView)
+                        }
                     }
                 } else {
                     Log.e(MAIN_ACTIVITY, "Error: ${response.errorBody()?.string()}")

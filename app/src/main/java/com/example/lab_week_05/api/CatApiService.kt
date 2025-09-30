@@ -5,7 +5,6 @@ import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query
 
-// 🔹 Interface khusus buat definisi endpoint API
 interface CatApiService {
     @GET("images/search")
     fun searchImages(
@@ -13,4 +12,3 @@ interface CatApiService {
         @Query("size") format: String
     ): Call<List<ImageData>>
 }
-

@@ -7,18 +7,19 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <!-- TextView untuk nampilin URL API -->
+    <!-- TextView untuk nampilin Breed -->
     <TextView
         android:id="@+id/api_response"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Waiting for response..."
+        android:textSize="18sp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="16dp" />
 
-    <!-- ImageView untuk nampilin gambar hasil API -->
+    <!-- ImageView untuk nampilin gambar -->
     <ImageView
         android:id="@+id/image_result"
         android:layout_width="300dp"
